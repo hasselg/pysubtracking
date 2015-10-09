@@ -38,7 +38,7 @@ class StaticSubspace:
         self._V = np.random.rand(width, rank)
         
         # Generate the observation matrix X
-        self.X = np.dot(self.U, self._V.T)
+        self.X = self.U @ self._V.T
         
     def next_observation(self):
         """
