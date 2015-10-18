@@ -63,8 +63,8 @@ class Grouse(tracker.Tracker):
         
         lhs_inner_update = (np.cos(sigma * step) - 1) * normalized_imputed_measurement
         rhs_inner_update = np.sin(sigma * step) * normalized_residual
-        rhs = (lhs_inner_update + rhs_inner_update) * normalized_projection
              
+        rhs = (lhs_inner_update + rhs_inner_update) @ normalized_projection
         self.U = self.U + rhs        
     
     def _project(self, ob_vec, sample_vec):
