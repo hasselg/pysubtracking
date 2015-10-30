@@ -53,9 +53,9 @@ class Grouse(tracker.Tracker):
 
         sigma = np.linalg.norm(residual) * np.linalg.norm(imputed_measurement)
 
-        normalized_imputed_measurement = imputed_measurement / np.linalg.norm(imputed_measurement)
-        normalized_residual = residual / np.linalg.norm(residual)
-        normalized_projection = projection.T / np.linalg.norm(projection)
+        normalized_imputed_measurement = np.nan_to_num(imputed_measurement / np.linalg.norm(imputed_measurement))
+        normalized_residual = np.nan_to_num(residual / np.linalg.norm(residual))
+        normalized_projection = np.nan_to_num(projection.T / np.linalg.norm(projection))
 
         lhs_inner_update = (np.cos(sigma * step) - 1) * normalized_imputed_measurement
         rhs_inner_update = np.sin(sigma * step) * normalized_residual
