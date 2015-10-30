@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
-
 import numpy as np
 
 class StaticSubspace:
@@ -21,32 +19,26 @@ class StaticSubspace:
     Class to generate observations from a known static subspace.
     """
     
-    def __init__(self, ambient_dim, width, rank):
+    def __init__(self, ambient_dim, rank):
         """
         Arguments:
         ambient_dim -- the ambient dimension of the observations to generate
-        width -- the number of observations that should be present in the observation matrix
         rank -- the rank of the subspace the observations will belong to
         """
-        
+
         self.ambient_dim = ambient_dim
-        self.width = width
         self.rank = rank
-        
-        # Generate U and _V
-        self.U = np.random.rand(ambient_dim, rank)
-        self._V = np.random.rand(width, rank)
-        
-        # Generate the observation matrix X
-        self.X = self.U @ self._V.T
-        
+
+        # Generate U
+        self.U = np.random.rand(ambient_dim, rank)        
+
+
     def next_observation(self):
         """
         Returns at random an observation from the static observation matrix
         """
-        
-        idx = random.randint(0, self.width - 1)
-        ob = self.X[:,idx].reshape((self.ambient_dim, 1))
+
+        random_projection = np.random.rand(self.rank, 1)
+        ob = self.U @ random_projection
 
         return ob
-        
