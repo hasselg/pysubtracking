@@ -15,7 +15,7 @@
 import numpy as np
 
 def calc_subspace_proj_error(U, U_hat):
-    """Calculate the normalized projection error between two subspaces.
+    """Calculate the normalized projection error between two orthogonal subspaces.
     Keyword arguments:
     U: ground truth subspace
     U_hat: estimated subspace
