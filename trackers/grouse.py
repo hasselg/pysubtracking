@@ -16,15 +16,16 @@ import numpy as np
 
 import tracker
 
+
 class Grouse(tracker.Tracker):
     """
     This class is an implementation of the Grassmannian Rank-One Update
     Subspace Estimation (GROUSE) subspace tracking algorithm, presented by
     Balzano et al. in  http://arxiv.org/abs/1006.4046
-    
+
     This class assumes the use of Numpy vectors.
     """
-    
+
     def __init__(self, ambient_dim, rank, step):
         """
         Keyword arguments:
@@ -47,9 +48,10 @@ class Grouse(tracker.Tracker):
         projection = self._project(ob_vec, sample_vec)
 
         # Find the imputed measurement residual
-        row_indices = np.nonzero(sample_vec)[0]        
+        row_indices = np.nonzero(sample_vec)[0]
         imputed_measurement = self.U @ projection
-        residual = ob_vec[row_indices,:] - imputed_measurement[row_indices,:]
+        residual = np.zeros((self.ambient_dim, 1))
+        residual[row_indices, :] = ob_vec[row_indices, :] - imputed_measurement[row_indices, :]
 
         sigma = np.linalg.norm(residual) * np.linalg.norm(imputed_measurement)
 
@@ -61,7 +63,7 @@ class Grouse(tracker.Tracker):
         rhs_inner_update = np.sin(sigma * step) * normalized_residual
         rhs = (lhs_inner_update + rhs_inner_update) @ normalized_projection
 
-        self.U = self.U + rhs        
+        self.U = self.U + rhs
 
     def _project(self, ob_vec, sample_vec):
         """Find the projection of the observation vector (ob_vec) into the subspace.
@@ -69,15 +71,12 @@ class Grouse(tracker.Tracker):
         ob_vec: observation vector with possibly missing data. Noise entries should be marked in sample_vec
         sample_vec: vector indicating missing data entries in ob_vec. Entries corresponding with ob_vec should be 1 where data was recorded and 0 where data was missing
         """
-    
+
         # Take only the rows of U that correspond to attributes we have observed
-        row_indices = np.nonzero(sample_vec)[0]        
-        U_samp = self.U[row_indices,:]
-        ob_vec_samp = ob_vec[row_indices,:]
-  
-#        print("Shape of U_samp: {}".format(U_samp.shape))
-#        print("Shape of ob_vec_samp: {}".format(ob_vec_samp.shape))
-    
+        row_indices = np.nonzero(sample_vec)[0]
+        U_samp = self.U[row_indices, :]
+        ob_vec_samp = ob_vec[row_indices, :]
+
         # Compute the weights
         projection = np.linalg.lstsq(U_samp, ob_vec_samp)[0]
 
