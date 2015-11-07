@@ -14,10 +14,10 @@
 
 import numpy as np
 
-import tracker
+from .tracker import Tracker
 
 
-class Grouse(tracker.Tracker):
+class Grouse(Tracker):
     """
     This class is an implementation of the Grassmannian Rank-One Update
     Subspace Estimation (GROUSE) subspace tracking algorithm, presented by
