@@ -50,7 +50,8 @@ class Grouse(tracker.Tracker):
         # Find the imputed measurement residual
         row_indices = np.nonzero(sample_vec)[0]
         imputed_measurement = self.U @ projection
-        residual = ob_vec[row_indices, :] - imputed_measurement[row_indices, :]
+        residual = np.zeros((self.ambient_dim, 1))
+        residual[row_indices, :] = ob_vec[row_indices, :] - imputed_measurement[row_indices, :]
 
         sigma = np.linalg.norm(residual) * np.linalg.norm(imputed_measurement)
 
@@ -70,15 +71,12 @@ class Grouse(tracker.Tracker):
         ob_vec: observation vector with possibly missing data. Noise entries should be marked in sample_vec
         sample_vec: vector indicating missing data entries in ob_vec. Entries corresponding with ob_vec should be 1 where data was recorded and 0 where data was missing
         """
-    
+
         # Take only the rows of U that correspond to attributes we have observed
         row_indices = np.nonzero(sample_vec)[0]
         U_samp = self.U[row_indices, :]
         ob_vec_samp = ob_vec[row_indices, :]
-  
-#        print("Shape of U_samp: {}".format(U_samp.shape))
-#        print("Shape of ob_vec_samp: {}".format(ob_vec_samp.shape))
-    
+
         # Compute the weights
         projection = np.linalg.lstsq(U_samp, ob_vec_samp)[0]
 
