@@ -14,6 +14,7 @@
 
 import numpy as np
 
+
 def calc_subspace_proj_error(U, U_hat):
     """Calculate the normalized projection error between two orthogonal subspaces.
     Keyword arguments:
@@ -21,12 +22,13 @@ def calc_subspace_proj_error(U, U_hat):
     U_hat: estimated subspace
     """
     I = np.identity(U.shape[0])
-    top = np.linalg.norm(I - U_hat @ U_hat.T, ord="fro")
+    top = np.linalg.norm((I - U_hat @ U_hat.T) @ U, ord="fro")
     bottom = np.linalg.norm(U, ord="fro")
-    
+
     error = float(top) / float(bottom)
-    
+
     return error
+
 
 def calc_matrix_error(X, X_hat):
     """Calculate the normalized error between two matrices.
@@ -36,10 +38,11 @@ def calc_matrix_error(X, X_hat):
     """
     top = np.linalg.norm(X - X_hat, ord="fro")
     bottom = np.linalg.norm(X, ord="fro")
-    
+
     error = float(top) / float(bottom)
-    
+
     return error
+
 
 def calc_observation_error(x, x_hat):
     """Calculate the normalized error between two vectors.
@@ -49,8 +52,7 @@ def calc_observation_error(x, x_hat):
     """
     top = np.linalg.norm(x - x_hat, ord="fro")
     bottom = np.linalg.norm(x, ord="fro")
-    
+
     error = float(top) / float(bottom)
-    
+
     return error
- 
