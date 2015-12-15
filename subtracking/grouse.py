@@ -63,20 +63,3 @@ class Grouse(Tracker):
         rhs = (lhs_inner_update + rhs_inner_update) @ normalized_projection
 
         self.U = self.U + rhs
-
-    def _project(self, ob_vec, sample_vec):
-        """Find the projection of the observation vector (ob_vec) into the subspace.
-        Keyword arguments:
-        ob_vec: observation vector with possibly missing data. Noise entries should be marked in sample_vec
-        sample_vec: vector indicating missing data entries in ob_vec. Entries corresponding with ob_vec should be 1 where data was recorded and 0 where data was missing
-        """
-
-        # Take only the rows of U that correspond to attributes we have observed
-        row_indices = np.nonzero(sample_vec)[0]
-        U_samp = self.U[row_indices, :]
-        ob_vec_samp = ob_vec[row_indices, :]
-
-        # Compute the weights
-        projection = np.linalg.lstsq(U_samp, ob_vec_samp)[0]
-
-        return projection
