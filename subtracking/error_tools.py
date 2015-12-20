@@ -13,14 +13,19 @@
 # limitations under the License.
 
 import numpy as np
+import scipy.linalg as splinalg
 
 
-def calc_subspace_proj_error(U, U_hat):
+def calc_subspace_proj_error(U, U_hat, ortho=False):
     """Calculate the normalized projection error between two orthogonal subspaces.
     Keyword arguments:
     U: ground truth subspace
     U_hat: estimated subspace
     """
+    if not ortho:
+        U = splinalg.orth(U)
+        U_hat = splinalg.orth(U_hat)
+
     I = np.identity(U.shape[0])
     top = np.linalg.norm((I - U_hat @ U_hat.T) @ U, ord="fro")
     bottom = np.linalg.norm(U, ord="fro")
